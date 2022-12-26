@@ -1,3 +1,10 @@
+
+from flask import Flask, render_template, request, make_response, jsonify
+…
+@app.route("/webhook", methods=["POST"])
+def webhook():
+  
+
 import firebase_admin
 from firebase_admin import credentials, firestore
 cred = credentials.Certificate("serviceAccountKey.json")
@@ -36,5 +43,10 @@ for item in result:
     collection_ref.add(doc)
 
 
+  
+    return make_response(jsonify({"fulfillmentText": info}))
+
+if __name__ == "__main__":
+    app.run()
 
 #print(info)

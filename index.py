@@ -1,14 +1,20 @@
-from flask import Flask, render_template, request, make_response, jsonify
-…
-@app.route("/webhook", methods=["POST"])
-def webhook():
-    # build a request object
-    req = request.get_json(force=True)
-    # fetch queryResult from json
-    action =  req.get("queryResult").get("action")
-    msg =  req.get("queryResult").get("queryText")
-    info = "動作：" + action + "； 查詢內容：" + msg
-    return make_response(jsonify({"fulfillmentText": info}))
+from flask import Flask, request
 
-if __name__ == "__main__":
-    app.run()
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "<h1>hello world</h1>"
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    req = request.get_json()    # 轉換成 dict 格式
+    print(req)
+    reText = req['queryResult']['fulfillmentText']   # 取得回覆文字
+    print(reText)
+    return {
+          "fulfillmentText": f'{reText} ( webhook )',
+          "source": "webhookdata"
+      }
+
+app.run()
